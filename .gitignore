@@ -9,3 +9,4 @@ dist/
 harness/out/
 harness/devset/clips/
 uv.lock
+.fireworks_key

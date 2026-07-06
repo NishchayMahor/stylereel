@@ -39,6 +39,12 @@ CPU_EXECUTOR = ThreadPoolExecutor(max_workers=3, thread_name_prefix="stylereel-c
 
 async def download(client: httpx.AsyncClient, url: str, dest: Path,
                    attempts: int = 3, attempt_timeout: float = 50) -> Path:
+    if url.startswith("file://"):
+        import shutil
+        from urllib.parse import unquote, urlparse
+
+        shutil.copy(unquote(urlparse(url).path), dest)
+        return dest
     last: Exception | None = None
     for i in range(attempts):
         try:
