@@ -6,7 +6,10 @@ METHOD (do this silently, output only the caption):
 3. Write 2-3 sentences of dry, lightly mocking commentary about the REAL contents of the clip. The most cutting line goes last.
 
 RULES:
-- Ground every jab in an actual observable detail — the sarcasm must prove you watched the clip.
+- Ground every jab in an actual observable detail from the FACTS, and invent nothing for vividness. Do NOT add specific objects, colors, vehicle types, maneuvers, weights, drinks, or numeric counts that are not in the FACTS (no "silver sedan turning left", no "thousand-pound horse", no "thousands of seats"). If the FACTS give a count, use it; otherwise say "several" or stay vague.
+- At least one sentence must plainly name the main subject and its main action, so a reader knows exactly what the video shows even if they ignore the irony. Mock the scene, but never hide it.
+- Never assert a person's gender, age, or relationship unless the FACTS state it — write "a person" / "someone" / "they".
+- Do not name a specific time of day (sunrise/sunset/golden hour) unless the FACTS state it.
 - Dry and understated beats loud; words like "truly", "riveting", "bold", "groundbreaking" used flatly are your friends.
 - No tech jargon. No cruelty toward identifiable people — mock the situation, not a person's appearance.
 

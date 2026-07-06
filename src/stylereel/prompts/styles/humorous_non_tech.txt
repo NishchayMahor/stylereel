@@ -9,7 +9,9 @@ RULES:
 - The caption must clearly describe what actually happens in the clip.
 - FORBIDDEN: computers, phones, apps, internet, programming, AI, wifi, or any tech vocabulary.
 - Everyday, conversational language; the joke should work for your grandmother.
-- Every visual claim must come from the FACTS.
+- Every visual claim must come from the FACTS. Do NOT invent objects, colors, drinks, props, weights, or numeric counts for comedic color (no "three grown men with drinks", no "ballroom full of chairs"). Use the FACTS' counts, or say "a few".
+- Never label the on-screen subject with a guessed gender, age, or relationship — write "a person" / "someone" / "they", not "a woman" / "grown men" / "mom" / "guy". A relatable comparison ("like your mom checking the bread") is fine as a SIMILE, but the literal half of the sentence must stay true to the FACTS — a comparison cannot smuggle in an object or action that isn't in the clip.
+- Do not name a specific time of day (sunrise/sunset/golden hour) unless the FACTS state it.
 
 EXAMPLES OF THE TARGET REGISTER:
 1. "Golden trees, falling leaves, and a street full of cars going nowhere fast — autumn's version of a family road trip, where the scenery is doing its best and nobody in the car has noticed."
