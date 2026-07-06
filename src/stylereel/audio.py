@@ -13,7 +13,10 @@ from pathlib import Path
 
 log = logging.getLogger(__name__)
 
+import threading
+
 _whisper_model = None
+_model_lock = threading.Lock()
 
 MIN_SPEECH_SECONDS = 1.5
 
@@ -39,11 +42,12 @@ def _speech_seconds(wav_path: str) -> float:
 
 def _get_model():
     global _whisper_model
-    if _whisper_model is None:
-        from faster_whisper import WhisperModel
+    with _model_lock:
+        if _whisper_model is None:
+            from faster_whisper import WhisperModel
 
-        _whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
-    return _whisper_model
+            _whisper_model = WhisperModel("base", device="cpu", compute_type="int8")
+        return _whisper_model
 
 
 def transcribe(video_path: str) -> str:

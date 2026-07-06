@@ -1,7 +1,9 @@
 """Entrypoint. Reads /input/tasks.json, writes /output/results.json, exits 0.
 
-The only contractually acceptable failure mode is fallback captions — never a
-missing file, never malformed JSON, never a non-zero exit after tasks were read.
+Results are written INSIDE the event loop (before asyncio.run tears down and
+joins executor threads), and the process then hard-exits: an abandoned whisper
+or ffmpeg thread must never delay the output write past the container's
+10-minute kill. STYLEREEL_HARD_EXIT=0 disables the hard exit for tests.
 """
 
 from __future__ import annotations
@@ -18,11 +20,42 @@ from .pipeline import run_batch
 
 INPUT = os.environ.get("STYLEREEL_INPUT", "/input/tasks.json")
 OUTPUT = os.environ.get("STYLEREEL_OUTPUT", "/output/results.json")
-BUDGET_S = float(os.environ.get("STYLEREEL_BUDGET_S", "510"))  # 8.5 min of the 10
+BUDGET_S = float(os.environ.get("STYLEREEL_BUDGET_S", "480"))  # 8 min of the 10
 
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("stylereel")
+
+
+def _safe_write(tasks, results: dict) -> None:
+    try:
+        write_results(OUTPUT, results, tasks)
+    except Exception as exc:  # last resort: write pure fallbacks
+        log.error("write_results failed (%s); writing pure fallbacks", exc)
+        try:
+            write_results(OUTPUT, {}, tasks)
+        except Exception as exc2:
+            log.error("fallback write also failed: %s", exc2)
+
+
+async def _run(tasks) -> None:
+    results: dict = {}
+
+    def checkpoint(current: dict) -> None:
+        # Skeleton-first: a schema-valid, complete results.json exists on disk
+        # from t=0 and is atomically refreshed after every finished clip.
+        write_results(OUTPUT, current, tasks)
+
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            results = await asyncio.wait_for(
+                run_batch(tasks, Path(td), BUDGET_S, checkpoint=checkpoint),
+                timeout=BUDGET_S + 45)
+    except Exception as exc:
+        log.error("batch failed: %s", exc)
+    # Write while the loop is alive — before any executor-thread join can block.
+    _safe_write(tasks, results)
+    log.info("wrote %s for %d tasks", OUTPUT, len(tasks))
 
 
 def main() -> int:
@@ -32,19 +65,18 @@ def main() -> int:
         log.error("cannot read tasks: %s", exc)
         return 1  # nothing sensible to write without task ids
 
-    results: dict = {}
     try:
-        with tempfile.TemporaryDirectory() as td:
-            results = asyncio.run(run_batch(tasks, Path(td), BUDGET_S))
+        asyncio.run(_run(tasks))
     except Exception as exc:
-        log.error("batch failed: %s", exc)
+        log.error("event loop failed (%s); ensuring output exists", exc)
+        _safe_write(tasks, {})
 
-    try:
-        write_results(OUTPUT, results, tasks)
-    except Exception as exc:  # last resort: write fallbacks only
-        log.error("write_results failed (%s); writing pure fallbacks", exc)
-        write_results(OUTPUT, {}, tasks)
-    log.info("wrote %s for %d tasks", OUTPUT, len(tasks))
+    if os.environ.get("STYLEREEL_HARD_EXIT", "1") == "1":
+        # Skip interpreter shutdown (which joins non-cancellable executor
+        # threads) — results are already on disk and fsync'd by os.replace.
+        sys.stdout.flush()
+        sys.stderr.flush()
+        os._exit(0)
     return 0
 
 

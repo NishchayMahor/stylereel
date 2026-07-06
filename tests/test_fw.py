@@ -2,8 +2,8 @@ import httpx
 import pytest
 import respx
 
-from stylereel.fw import FIREWORKS_BASE, FWError, ModelClient, frames_to_content
 from stylereel.frames import Frame
+from stylereel.fw import FIREWORKS_BASE, FWError, ModelClient, frames_to_content
 from stylereel.keybox import _deobfuscate, obfuscate
 
 URL = f"{FIREWORKS_BASE}/chat/completions"
@@ -33,7 +33,7 @@ async def test_fallback_on_500():
     calls = []
 
     def handler(request):
-        calls.append(request.read())
+        calls.append(1)
         if len(calls) <= 2:  # first model, 2 attempts -> 500
             return httpx.Response(500, json={"error": "boom"})
         return _ok("from fallback")
@@ -47,6 +47,41 @@ async def test_fallback_on_500():
 
 
 @respx.mock
+async def test_empty_choices_falls_through_chain():
+    """200 with empty choices must NOT abort the chain (IndexError path)."""
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        if len(calls) <= 2:
+            return httpx.Response(200, json={"choices": []})
+        return _ok("recovered")
+
+    respx.post(URL).mock(side_effect=handler)
+    client = ModelClient()
+    out = await client.chat([{"role": "user", "content": "hi"}])
+    assert out == "recovered"
+    await client.close()
+
+
+@respx.mock
+async def test_non_json_body_falls_through_chain():
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        if len(calls) <= 2:
+            return httpx.Response(200, text="<html>gateway</html>")
+        return _ok("recovered")
+
+    respx.post(URL).mock(side_effect=handler)
+    client = ModelClient()
+    out = await client.chat([{"role": "user", "content": "hi"}])
+    assert out == "recovered"
+    await client.close()
+
+
+@respx.mock
 async def test_all_fail_raises():
     respx.post(URL).mock(return_value=httpx.Response(500, json={}))
     client = ModelClient()
@@ -56,18 +91,32 @@ async def test_all_fail_raises():
 
 
 @respx.mock
-async def test_gemma_preferred_then_failover(monkeypatch):
+async def test_gemma_transport_failures_accumulate(monkeypatch):
     monkeypatch.setenv("GEMMA_ENDPOINT", "http://gemma.local/v1")
     respx.post("http://gemma.local/v1/chat/completions").mock(
         side_effect=httpx.ConnectError("down"))
     respx.post(URL).mock(return_value=_ok("fw answer"))
     client = ModelClient()
-    out = await client.chat([{"role": "user", "content": "hi"}])
-    assert out == "fw answer"
-    # gemma marked down: second call goes straight to fireworks
-    out2 = await client.chat([{"role": "user", "content": "hi"}])
-    assert out2 == "fw answer"
-    assert client._gemma_down is True
+    for _ in range(3):
+        assert await client.chat([{"role": "user", "content": "hi"}]) == "fw answer"
+    assert client._gemma_down is True  # 3 transport failures -> down
+    # subsequent calls skip gemma entirely
+    assert await client.chat([{"role": "user", "content": "hi"}]) == "fw answer"
+    await client.close()
+
+
+@respx.mock
+async def test_gemma_4xx_does_not_mark_down(monkeypatch):
+    monkeypatch.setenv("GEMMA_ENDPOINT", "http://gemma.local/v1")
+    gemma_route = respx.post("http://gemma.local/v1/chat/completions")
+    gemma_route.mock(return_value=httpx.Response(400, json={"error": "too large"}))
+    respx.post(URL).mock(return_value=_ok("fw answer"))
+    client = ModelClient()
+    assert await client.chat([{"role": "user", "content": "hi"}]) == "fw answer"
+    assert client._gemma_down is False  # per-request rejection, endpoint healthy
+    # next call tries gemma again
+    gemma_route.mock(return_value=_ok("gemma answer"))
+    assert await client.chat([{"role": "user", "content": "hi"}]) == "gemma answer"
     await client.close()
 
 

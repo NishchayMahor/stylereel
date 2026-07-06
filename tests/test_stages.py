@@ -3,7 +3,7 @@ import json
 import pytest
 
 from stylereel.frames import Frame
-from stylereel.stages import describe, pick_best, stylize
+from stylereel.stages import _parse_judge_json, describe, pick_best, stylize
 
 
 class FakeClient:
@@ -13,8 +13,15 @@ class FakeClient:
         self.responses = list(responses)
         self.calls = []
 
-    async def chat(self, messages, **kwargs):
-        self.calls.append({"messages": messages, "kwargs": kwargs})
+    async def chat(self, messages, *, chain=None, vision=False, max_tokens=1024,
+                   temperature=0.7, use_gemma=True, read_timeout=55):
+        # signature mirrors ModelClient.chat so kwarg drift fails tests
+        self.calls.append({"messages": messages,
+                           "kwargs": dict(chain=chain, vision=vision,
+                                          max_tokens=max_tokens,
+                                          temperature=temperature,
+                                          use_gemma=use_gemma,
+                                          read_timeout=read_timeout)})
         r = self.responses.pop(0)
         if isinstance(r, Exception):
             raise r
@@ -43,10 +50,36 @@ async def test_stylize_returns_candidates_and_style_prompt():
     assert "FACTS" in client.calls[0]["messages"][1]["content"]
 
 
+async def test_stylize_unknown_style_uses_generic_prompt():
+    client = FakeClient(["poetic caption"])
+    outs = await stylize(client, "desc", "poetic", n=1)
+    assert outs == ["poetic caption"]
+    system = client.calls[0]["messages"][0]["content"]
+    assert '"poetic"' in system
+
+
+async def test_stylize_case_variant_maps_to_canonical():
+    client = FakeClient(["formal caption"])
+    await stylize(client, "desc", "Formal", n=1)
+    assert "archivist" in client.calls[0]["messages"][0]["content"]
+
+
 async def test_stylize_all_fail_raises():
     client = FakeClient([RuntimeError("x"), RuntimeError("x"), RuntimeError("x")])
     with pytest.raises(RuntimeError):
         await stylize(client, "desc", "formal", n=3)
+
+
+def test_parse_judge_json_with_trailing_prose():
+    text = ('Here you go: {"scores": [{"i": 0, "accuracy": 5, "tone": 4}]} '
+            "Note: caption {1} was weaker.")
+    scores = _parse_judge_json(text)
+    assert scores[0]["accuracy"] == 5
+
+
+def test_parse_judge_json_skips_leading_junk_objects():
+    text = '{"not_scores": 1} then {"scores": [{"i": 1, "accuracy": 3, "tone": 2}]}'
+    assert _parse_judge_json(text)[0]["i"] == 1
 
 
 async def test_pick_best_accuracy_gate():
@@ -75,3 +108,20 @@ async def test_pick_best_judge_garbage_returns_first():
     client = FakeClient(["not json at all"])
     best = await pick_best(client, "desc", "formal", ["a", "b"])
     assert best == "a"
+
+
+async def test_pick_best_wrong_shaped_scores_returns_first():
+    """Parseable but wrong-shaped judge output must not lose the caption."""
+    client = FakeClient([json.dumps({"scores": [4, 5]})])
+    best = await pick_best(client, "desc", "formal", ["a", "b"])
+    assert best == "a"
+
+
+async def test_pick_best_judge_never_uses_gemma():
+    verdict = json.dumps({"scores": [
+        {"i": 0, "accuracy": 5, "tone": 5, "contradictions": []},
+        {"i": 1, "accuracy": 5, "tone": 4, "contradictions": []},
+    ]})
+    client = FakeClient([verdict])
+    await pick_best(client, "desc", "formal", ["a", "b"])
+    assert client.calls[0]["kwargs"]["use_gemma"] is False
