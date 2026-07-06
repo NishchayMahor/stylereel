@@ -24,19 +24,21 @@ log = logging.getLogger(__name__)
 
 FIREWORKS_BASE = "https://api.fireworks.ai/inference/v1"
 
+# Verified against the live /models endpoint for this account (2026-07-06).
+# Only kimi-k2p6 / kimi-k2p5 accept image input on serverless here.
 VISION_CHAIN = [
-    "accounts/fireworks/models/qwen3p7-plus",
-    "accounts/fireworks/models/minimax-m3",
     "accounts/fireworks/models/kimi-k2p6",
+    "accounts/fireworks/models/kimi-k2p5",
 ]
 TEXT_CHAIN = [
     "accounts/fireworks/models/kimi-k2p6",
-    "accounts/fireworks/models/qwen3p7-plus",
-    "accounts/fireworks/models/minimax-m3",
+    "accounts/fireworks/models/deepseek-v4-pro",
+    "accounts/fireworks/models/glm-5p2",
 ]
+# Text-only, different family from the kimi generator -> judge independence.
 JUDGE_CHAIN = [
-    "accounts/fireworks/models/deepseek-v4-flash",
-    "accounts/fireworks/models/minimax-m3",
+    "accounts/fireworks/models/deepseek-v4-pro",
+    "accounts/fireworks/models/glm-5p2",
 ]
 
 GEMMA_DOWN_THRESHOLD = 3  # consecutive transport failures before giving up
@@ -48,6 +50,18 @@ RETRIABLE = (httpx.HTTPError, json.JSONDecodeError, KeyError, IndexError, ValueE
 
 class FWError(RuntimeError):
     pass
+
+
+def _strip_reasoning(text: str) -> str:
+    """Belt-and-suspenders: remove <think>…</think> blocks some models still emit
+    even with reasoning_effort=none."""
+    import re
+
+    text = re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL | re.IGNORECASE)
+    # drop an unmatched leading '<think>...' with no closing tag
+    if "<think>" in text.lower():
+        text = re.split(r"</?think>", text, flags=re.IGNORECASE)[-1]
+    return text.strip()
 
 
 class ModelClient:
@@ -67,11 +81,14 @@ class ModelClient:
     async def _post(self, base_url: str, api_key: str, model: str,
                     messages: list, max_tokens: int, temperature: float,
                     read_timeout: float, connect_timeout: float = 15) -> str:
+        # reasoning_effort=none: the serverless models here (Kimi, DeepSeek, GLM)
+        # are reasoning models that otherwise inline their chain-of-thought into
+        # `content` with no delimiter — this keeps captions clean.
         resp = await self._client.post(
             f"{base_url}/chat/completions",
             headers={"Authorization": f"Bearer {api_key}"},
-            json={"model": model, "messages": messages,
-                  "max_tokens": max_tokens, "temperature": temperature},
+            json={"model": model, "messages": messages, "max_tokens": max_tokens,
+                  "temperature": temperature, "reasoning_effort": "none"},
             timeout=httpx.Timeout(read_timeout, connect=connect_timeout),
         )
         resp.raise_for_status()
@@ -79,7 +96,7 @@ class ModelClient:
         content = data["choices"][0]["message"]["content"]
         if not isinstance(content, str) or not content.strip():
             raise FWError("empty completion")
-        return content
+        return _strip_reasoning(content)
 
     async def chat(self, messages: list, *, chain: list[str] | None = None,
                    vision: bool = False, max_tokens: int = 1024,

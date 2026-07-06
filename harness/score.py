@@ -40,7 +40,10 @@ STYLE_DEFS = {
     "humorous_non_tech": "funny, everyday humor with zero technical jargon",
 }
 
-JUDGE_MODEL = ["accounts/fireworks/models/kimi-k2p6"]
+# Accuracy judge must watch the clip -> needs vision (only kimi has it here).
+# Style/blind judges are text-only -> use a different family to cut self-preference.
+VISION_JUDGE = ["accounts/fireworks/models/kimi-k2p6"]
+TEXT_JUDGE = ["accounts/fireworks/models/deepseek-v4-pro"]
 
 ACC_PROMPT = """You are scoring a video caption for ACCURACY. You are shown frames from the video.
 Caption ({style}): "{caption}"
@@ -65,8 +68,8 @@ Reply ONLY JSON mapping caption index to style: {{"0": "...", "1": "...", "2": "
 
 
 def _frames_content(frames):
-    content = [{"type": "text", "text": "Video frames:"}]
-    for f in frames[:8]:
+    content = [{"type": "text", "text": "Video frames (chronological):"}]
+    for f in frames[:16]:  # full coverage so the judge can verify real details
         b64 = base64.b64encode(f.jpeg).decode()
         content.append({"type": "image_url",
                         "image_url": {"url": f"data:image/jpeg;base64,{b64}"}})
@@ -99,9 +102,9 @@ async def score_clip(client: ModelClient, task_id: str, video_path: Path,
             style=style, style_def=STYLE_DEFS.get(style, style), caption=cap)}]
         acc_raw, sty_raw = await asyncio.gather(
             client.chat(acc_msgs, vision=True, max_tokens=120, temperature=0.0,
-                        use_gemma=False, chain=JUDGE_MODEL),
+                        use_gemma=False, chain=VISION_JUDGE),
             client.chat(sty_msgs, max_tokens=120, temperature=0.0,
-                        use_gemma=False, chain=JUDGE_MODEL),
+                        use_gemma=False, chain=TEXT_JUDGE),
         )
         per_style[style] = {"accuracy": _num(acc_raw, "accuracy"),
                             "style": _num(sty_raw, "style")}
@@ -113,7 +116,7 @@ async def score_clip(client: ModelClient, task_id: str, video_path: Path,
         listing = "\n".join(f"[{i}] {captions[s]}" for i, s in enumerate(ordered))
         raw = await client.chat(
             [{"role": "user", "content": BLIND_PROMPT.format(captions=listing)}],
-            max_tokens=120, temperature=0.0, use_gemma=False, chain=JUDGE_MODEL)
+            max_tokens=120, temperature=0.0, use_gemma=False, chain=TEXT_JUDGE)
         try:
             dec = json.JSONDecoder()
             j = raw.find("{")
