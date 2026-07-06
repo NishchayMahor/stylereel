@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.venv/
+dist/
+.pytest_cache/
+*.mp4
+*.wav
+.env
+harness/out/
+harness/devset/clips/
+uv.lock
