@@ -1,0 +1,23 @@
+StyleReel — Example Output 01
+============================================================
+
+VIDEO: example-01-kitten.mp4
+SOURCE: AMD hackathon clip 13825391 (3840x2160, 12s)
+CONTENT: an orange kitten moving through green garden foliage toward the camera
+AUDIO: no speech (ambient only)
+
+The agent extracts smart keyframes, writes one grounded factual
+description, then derives four captions in distinct voices:
+
+
+[FORMAL]
+A small orange kitten with large dark eyes and white whiskers sits amid dense green undergrowth and thin tree trunks in a sunlit forest, dappled light shifting subtly across the brown leaf-littered ground. The animal remains largely stationary with only slight head movements throughout the clip, while the static camera maintains a fixed perspective. The kitten exhibits an artificially smooth, heavily filtered appearance that contrasts with the naturalistic textured background, producing an uncanny visual effect suggestive of digital compositing.
+
+[SARCASTIC]
+A small orange kitten with large dark eyes sits motionless among green vegetation and thin tree trunks, doing almost nothing for twelve seconds while dappled sunlight shifts politely around it. The light and shadow patterns show more initiative than the animal, which appears to have been digitally smoothed into something between a cat and a porcelain figurine. Truly, the uncanny valley has never looked so aggressively still.
+
+[HUMOROUS_TECH]
+A small orange kitten with oversized dark eyes sits perfectly still in a sun-dappled forest, its uncannily smooth, almost painted fur making it look like a digital asset dropped onto a naturalistic background. For twelve seconds it does absolutely nothing—no blink, no twitch, no garbage collection cycle whatsoever. Classic containerized microservice: deployed to prod, health check passes, but nobody's actually sure if the process is alive or just holding a socket open.
+
+[HUMOROUS_NON_TECH]
+A tiny orange kitten sits perfectly still in the woods, blinking like someone who's just been asked to explain where the last four hours went. The leaves move, the light shifts, the whole forest keeps busy around it — and this cat's contribution is the exact energy of a person who joined a hiking group for the exercise and discovered they hate nature. Meanwhile its face is so impossibly smooth it looks like it was borrowed from a ceramic mug, which is honestly the most relatable thing in the shot: we've all shown up somewhere polished and realized too late we don't match the background.

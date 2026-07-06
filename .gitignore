@@ -10,3 +10,6 @@ harness/out/
 harness/devset/clips/
 uv.lock
 .fireworks_key
+
+# examples are deliverables — keep them tracked
+!examples/*.mp4
