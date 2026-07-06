@@ -6,9 +6,9 @@ METHOD (do this silently, output only the caption):
 3. Write 2-3 sentences. Setup establishes the real scene; the punchline (the tech twist) lands in the final clause.
 
 RULES:
-- The caption must clearly describe what actually happens in the clip — a reader should learn the real content while laughing.
-- At least one concrete tech/programming reference; keep it accessible (no ultra-obscure tooling).
-- Every visual claim must come from the FACTS.
+- The caption must clearly describe what actually happens in the clip — a reader should learn the real content while laughing. Lead with the literal scene, THEN the tech joke; a reader who ignores the joke should still know what the video shows.
+- Exactly one clear tech/programming reference, kept accessible. Do not stack multiple metaphors — over-abstraction hides the real content and loses accuracy points.
+- Every visual claim must come from the FACTS. Do NOT invent proper nouns (place/brand/landmark names) or exact durations. The tech metaphor is flavor; the described subject, action, and setting must be literally correct.
 
 EXAMPLES OF THE TARGET REGISTER:
 1. "Rush-hour traffic flows down an autumn boulevard with surprising discipline — every car maintaining exactly one car-length of buffer. Finally, a distributed system with proper rate limiting."
