@@ -1,4 +1,4 @@
-StyleReel — Example Output 01
+StyleReel, Example Output 01
 ============================================================
 
 VIDEO: example-01-kitten.mp4
@@ -17,7 +17,7 @@ A small orange kitten with large dark eyes and white whiskers sits amid dense gr
 A small orange kitten with large dark eyes sits motionless among green vegetation and thin tree trunks, doing almost nothing for twelve seconds while dappled sunlight shifts politely around it. The light and shadow patterns show more initiative than the animal, which appears to have been digitally smoothed into something between a cat and a porcelain figurine. Truly, the uncanny valley has never looked so aggressively still.
 
 [HUMOROUS_TECH]
-A small orange kitten with oversized dark eyes sits perfectly still in a sun-dappled forest, its uncannily smooth, almost painted fur making it look like a digital asset dropped onto a naturalistic background. For twelve seconds it does absolutely nothing—no blink, no twitch, no garbage collection cycle whatsoever. Classic containerized microservice: deployed to prod, health check passes, but nobody's actually sure if the process is alive or just holding a socket open.
+A small orange kitten with oversized dark eyes sits perfectly still in a sun-dappled forest, its uncannily smooth, almost painted fur making it look like a digital asset dropped onto a naturalistic background. For twelve seconds it does absolutely nothing, no blink, no twitch, no garbage collection cycle whatsoever. Classic containerized microservice: deployed to prod, health check passes, but nobody's actually sure if the process is alive or just holding a socket open.
 
 [HUMOROUS_NON_TECH]
-A tiny orange kitten sits perfectly still in the woods, blinking like someone who's just been asked to explain where the last four hours went. The leaves move, the light shifts, the whole forest keeps busy around it — and this cat's contribution is the exact energy of a person who joined a hiking group for the exercise and discovered they hate nature. Meanwhile its face is so impossibly smooth it looks like it was borrowed from a ceramic mug, which is honestly the most relatable thing in the shot: we've all shown up somewhere polished and realized too late we don't match the background.
+A tiny orange kitten sits perfectly still in the woods, blinking like someone who's just been asked to explain where the last four hours went. The leaves move, the light shifts, the whole forest keeps busy around it, and this cat's contribution is the exact energy of a person who joined a hiking group for the exercise and discovered they hate nature. Meanwhile its face is so impossibly smooth it looks like it was borrowed from a ceramic mug, which is honestly the most relatable thing in the shot: we've all shown up somewhere polished and realized too late we don't match the background.

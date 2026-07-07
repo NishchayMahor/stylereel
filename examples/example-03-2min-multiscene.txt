@@ -1,9 +1,8 @@
-StyleReel — Example Output 03 (2-MINUTE MULTI-SCENE STRESS TEST)
+StyleReel, Example Output 03 (2-MINUTE MULTI-SCENE STRESS TEST)
 ============================================================
 
 VIDEO: example-03-2min-multiscene.mp4  (127 seconds)
-CONTENT: three scenes back-to-back —
-  1. a low sun over rippling water (sunset/sunrise)
+CONTENT: three scenes back-to-back, 1. a low sun over rippling water (sunset/sunrise)
   2. a low-angle grassy field where a figure appears near trees
   3. blurred traffic lights on a wet road at night, red->green
 AUDIO: a looping spoken line about a server deployment catching fire
@@ -11,11 +10,11 @@ AUDIO: a looping spoken line about a server deployment catching fire
 Why this example matters: the hidden eval clips are 30s-2min. This proves
 StyleReel (a) covers ALL scenes across a long clip, not just the opening
 frame, (b) transcribes and uses 2 minutes of dialogue, and (c) finishes a
-2-min clip in ~51s — comfortably inside the 10-minute batch budget.
+2-min clip in ~51s, comfortably inside the 10-minute batch budget.
 
 
 [FORMAL]
-A body of water with visible wave patterns stretches beneath a low sun near the horizon, with subtle cloud movement and color shifts in the sky during a static view from 00:06 to 00:56. The camera shifts to a low angle near the ground in a grassy field with green and yellow vegetation, where bright glare intensifies and a dark figure appears standing near a line of trees from 01:01 to 01:33 before disappearing. The scene transitions to movement through darkness with multiple colored lights—white, yellow, red, and green—shifting and blurring across a reflective wet surface as the lights change from red to green from 01:37 to 02:05, while audio of a repeated spoken phrase about a server deployment catching fire loops with increasing fragmentation and distortion throughout the duration.
+A body of water with visible wave patterns stretches beneath a low sun near the horizon, with subtle cloud movement and color shifts in the sky during a static view from 00:06 to 00:56. The camera shifts to a low angle near the ground in a grassy field with green and yellow vegetation, where bright glare intensifies and a dark figure appears standing near a line of trees from 01:01 to 01:33 before disappearing. The scene transitions to movement through darkness with multiple colored lights, white, yellow, red, and green, shifting and blurring across a reflective wet surface as the lights change from red to green from 01:37 to 02:05, while audio of a repeated spoken phrase about a server deployment catching fire loops with increasing fragmentation and distortion throughout the duration.
 
 [SARCASTIC]
 Ah, the timeless triptych: water pretending to be a horizon, grass pretending to be interesting, and someone standing in a field before wisely reconsidering. The sun nearly touches the water for almost a minute, which is truly the minimum viable effort for a sunset. Then traffic lights blur past in darkness, a bold visual metaphor for the server fire we are told, repeatedly, to anticipate. The audio fragments into overlapping despair while the lights shift from red to green, as if the infrastructure itself were being permitted to proceed toward its own destruction.
@@ -24,4 +23,4 @@ Ah, the timeless triptych: water pretending to be a horizon, grass pretending to
 A serene sunset lingers over calm water, then shifts to a sun-bleached field where a lone figure briefly materializes and vanishes, before dissolving into night-blurred traffic lights cycling red to green. The audio loop about a deployment catching fire degrades into digital static, as if the entire landscape is just a crashed CI pipeline's dying memory buffer, endlessly repeating its final error log before the kernel panics for good.
 
 [HUMOROUS_NON_TECH]
-The sun dips low over water so calm you'd expect a meditation app, then suddenly you're face-down in grass staring at a lens flare like you fell asleep on a picnic. A figure stands in the field for one perfect moment—like someone who just remembered they left the stove on—then disappears entirely. By the end you're hurtling through red lights to green lights in the dark, while a voice keeps cheerfully announcing that everything is definitely on fire, which is the same energy as my uncle narrating his own grilling disasters at the family reunion.
+The sun dips low over water so calm you'd expect a meditation app, then suddenly you're face-down in grass staring at a lens flare like you fell asleep on a picnic. A figure stands in the field for one perfect moment, like someone who just remembered they left the stove on, then disappears entirely. By the end you're hurtling through red lights to green lights in the dark, while a voice keeps cheerfully announcing that everything is definitely on fire, which is the same energy as my uncle narrating his own grilling disasters at the family reunion.

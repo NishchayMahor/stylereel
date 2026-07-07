@@ -1,16 +1,16 @@
-StyleReel — Example Output 02 (AUDIO PATH DEMO)
+StyleReel, Example Output 02 (AUDIO PATH DEMO)
 ============================================================
 
 VIDEO: example-02-speech-demo.mp4
 CONTENT: a television test pattern (color bars) on screen
-AUDIO: spoken narration — "Welcome back to the channel everyone.
+AUDIO: spoken narration, "Welcome back to the channel everyone.
        Today we are testing whether the new deployment survives
        production traffic. Spoiler alert, it did not. The server
        caught fire almost immediately."
 
 Why this example matters: Fireworks deprecated its speech API, so most
 entrants caption with NO audio. StyleReel transcribes locally
-(faster-whisper) and feeds the dialogue into the description — so the
+(faster-whisper) and feeds the dialogue into the description, so the
 captions understand BOTH what's on screen AND what's being said. Watch
 how each voice fuses the visual (test pattern) with the audio (a
 deployment disaster):
@@ -19,11 +19,11 @@ deployment disaster):
 A television test pattern displays vertical color bars with a central circular overlay and a cycling horizontal rainbow gradient bar at the bottom. A black rectangular graphic with white internal elements occupies the right-center area, shifting slightly before enlarging noticeably at the end of the clip. Static camera holds the digital screen throughout while audio narrates a software deployment test that fails immediately and causes server problems.
 
 [SARCASTIC]
-A television test pattern quietly cycles its colors and shifts a black graphic in the corner, performing its solemn duty of being absolutely nothing. The bottom gradient bar does what gradient bars do—moves, impressively, from one hue to another—while the black rectangle grows slightly larger, as if demanding attention it has not earned. Truly the visual grandeur of a software deployment gone wrong, with the audio explaining in real time how everything broke, which is more than the colors ever managed to do.
+A television test pattern quietly cycles its colors and shifts a black graphic in the corner, performing its solemn duty of being absolutely nothing. The bottom gradient bar does what gradient bars do, moves, impressively, from one hue to another, while the black rectangle grows slightly larger, as if demanding attention it has not earned. Truly the visual grandeur of a software deployment gone wrong, with the audio explaining in real time how everything broke, which is more than the colors ever managed to do.
 
 [HUMOROUS_TECH]
-A television test pattern of color bars holds steady while a small black graphic in the corner slowly inflates and a rainbow gradient at the bottom cycles endlessly. The audio describes a production deployment that exploded on contact, which tracks—this is what every CI pipeline looks like when you are running it locally and praying nobody checks the actual server logs.
+A television test pattern of color bars holds steady while a small black graphic in the corner slowly inflates and a rainbow gradient at the bottom cycles endlessly. The audio describes a production deployment that exploded on contact, which tracks, this is what every CI pipeline looks like when you are running it locally and praying nobody checks the actual server logs.
 
 [HUMOROUS_NON_TECH]
-You know how you are watching one of those late-night test patterns, that soothing rainbow just cycling away, and you are half-asleep thinking "ah, nothing is happening, the world is at peace" — meanwhile someone is off-screen having the kind of Monday where they just tried something new at work and now the whole place is on fire. The little black logo even puffs up at the end like it is trying to look innocent.
+You know how you are watching one of those late-night test patterns, that soothing rainbow just cycling away, and you are half-asleep thinking "ah, nothing is happening, the world is at peace", meanwhile someone is off-screen having the kind of Monday where they just tried something new at work and now the whole place is on fire. The little black logo even puffs up at the end like it is trying to look innocent.
 

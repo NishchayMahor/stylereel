@@ -41,7 +41,7 @@
                                         ▼  candidates
                     ┌────────────────────────────────────────────┐
                     │  STAGE 3 · SELF-JUDGE  (text, independent   │
-                    │  model family — DeepSeek V4)                │
+                    │  model family, DeepSeek V4)                │
                     │  accuracy hard-gate → revise; tone → pick   │
                     └───────────────────┬────────────────────────┘
                                         ▼
