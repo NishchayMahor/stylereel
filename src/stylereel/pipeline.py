@@ -129,17 +129,28 @@ async def process_clip(client: ModelClient, http: httpx.AsyncClient, task: Task,
 
     desc: str | None = None
     try:
-        # 130s allows the primary attempt (55s read) plus at least one fallback model
-        desc = await asyncio.wait_for(describe(client, frames, transcript), timeout=130)
+        # Verify pass (extra vision call) only when there is time headroom.
+        verify = deadline.comfortable
+        # 200s covers draft + verify each with a fallback attempt
+        desc = await asyncio.wait_for(
+            describe(client, frames, transcript, verify=verify),
+            timeout=200 if verify else 130)
     except Exception as exc:
         log.warning("clip %s: describe failed: %s", task.task_id, exc)
+
+    from .contract import canonical_style
+    volatile = {"sarcastic", "humorous_tech", "humorous_non_tech"}
 
     async def do_style(style: str) -> None:
         try:
             if desc is None:
                 captions[style] = (await _single_shot(client, frames, transcript, style)).strip()
                 return
-            n = 3 if deadline.comfortable else 1
+            if deadline.comfortable:
+                # humor/sarcasm vary most in accuracy -> more candidates for the judge to pick from
+                n = 5 if canonical_style(style) in volatile else 3
+            else:
+                n = 1
             cands = await stylize(client, desc, style, n=n)
             captions[style] = cands[0]  # bank a caption immediately
             if n > 1 and not deadline.critical:

@@ -55,13 +55,37 @@ def _style_system_prompt(style: str) -> str:
     return GENERIC_STYLE_PROMPT.replace("{style_name}", style)
 
 
-async def describe(client: ModelClient, frames, transcript: str) -> str:
-    messages = [
-        {"role": "system", "content": _load("describe.txt")},
-        {"role": "user", "content": frames_to_content(frames, transcript)},
-    ]
-    return await client.chat(messages, vision=True, max_tokens=1200,
-                             temperature=0.2, read_timeout=55)
+VERIFY_PROMPT = """You are shown the SAME video frames plus a draft description of them.
+Your job: return a corrected description that a fact-checker watching these frames would
+rate as 100% accurate. Go claim by claim:
+- DELETE any statement not clearly supported by the frames (guessed identities, invented
+  objects/colors/counts, assumed places/brands, specific times of day, exact durations).
+- SOFTEN over-confident claims to what is actually visible (e.g. "hundreds of people" ->
+  "a crowd"; "a woman" -> "a person" unless obvious).
+- KEEP every well-supported detail and the section structure.
+Output only the corrected description, same section format, no commentary."""
+
+
+async def describe(client: ModelClient, frames, transcript: str,
+                   verify: bool = False) -> str:
+    content = frames_to_content(frames, transcript)
+    draft = await client.chat(
+        [{"role": "system", "content": _load("describe.txt")},
+         {"role": "user", "content": content}],
+        vision=True, max_tokens=1200, temperature=0.2, read_timeout=55)
+    if not verify:
+        return draft
+    # Second vision pass grounds the facts all four styles inherit -> lifts accuracy.
+    verify_content = content + [
+        {"type": "text", "text": f"DRAFT DESCRIPTION:\n{draft}"}]
+    try:
+        return await client.chat(
+            [{"role": "system", "content": VERIFY_PROMPT},
+             {"role": "user", "content": verify_content}],
+            vision=True, max_tokens=1200, temperature=0.1, read_timeout=55)
+    except Exception as exc:
+        log.warning("describe verification failed (%s); using draft", exc)
+        return draft
 
 
 async def stylize(client: ModelClient, description: str, style: str, n: int = 3) -> list[str]:

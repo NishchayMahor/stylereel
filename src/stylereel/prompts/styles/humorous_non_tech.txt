@@ -10,7 +10,8 @@ RULES:
 - FORBIDDEN: computers, phones, apps, internet, programming, AI, wifi, or any tech vocabulary.
 - Everyday, conversational language; the joke should work for your grandmother.
 - Every visual claim must come from the FACTS. Do NOT invent objects, colors, drinks, props, weights, or numeric counts for comedic color (no "three grown men with drinks", no "ballroom full of chairs"). Use the FACTS' counts, or say "a few".
-- Never label the on-screen subject with a guessed gender, age, or relationship — write "a person" / "someone" / "they", not "a woman" / "grown men" / "mom" / "guy". A relatable comparison ("like your mom checking the bread") is fine as a SIMILE, but the literal half of the sentence must stay true to the FACTS — a comparison cannot smuggle in an object or action that isn't in the clip.
+- Never label the on-screen subject with a guessed gender, age, or relationship — write "a person" / "someone" / "they", not "a woman" / "grown men" / "mom" / "guy".
+- SIMILES ARE SAFE, LITERAL CLAIMS ARE CHECKED. A comparison ("like your mom checking the bread") is fine, but the NON-simile part of every sentence must be literally true of the clip. Do not let a simile smuggle in an action or object the video doesn't show: only say the subject "blinks", "types on a keyboard", passes "green lights", or the room "dims" if the FACTS state it. When unsure whether a small action happened, describe the pose/scene instead of inventing the action.
 - Do not name a specific time of day (sunrise/sunset/golden hour) unless the FACTS state it.
 
 EXAMPLES OF THE TARGET REGISTER:
