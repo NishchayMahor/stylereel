@@ -82,7 +82,7 @@ video ─┬─ ffmpeg smart-frame sampling ── 16 diverse, sharp, timestampe
 
 ## Backends
 Fireworks AI serverless (Qwen 3.7 Plus vision · Kimi K2.6 stylize · DeepSeek V4 Flash judge),
-with an optional **self-hosted Gemma 3 27B on AMD MI300X (vLLM/ROCm)** as the preferred
+with an optional **self-hosted Gemma 3 12B on AMD Radeon PRO W7900 (vLLM/ROCm)** as the preferred
 describe backend (`GEMMA_ENDPOINT`), automatically failing over to Fireworks. See
 [`docs/GEMMA.md`](docs/GEMMA.md).
 
@@ -109,7 +109,7 @@ blind-style-ID distinctness metric. Current dev-set standing:
 | 2-min multi-scene clip, end-to-end | 51 s |
 | chaos suite (dead URL, odd styles, malformed input) | 5/5 pass |
 
-See `docs/architecture.md` (pipeline), `docs/GEMMA.md` (the AMD MI300X + Gemma story),
+See `docs/architecture.md` (pipeline), `docs/GEMMA.md` (the AMD Radeon PRO W7900 + Gemma story),
 `docs/SUBMISSION.md` (demo script), and the ablation table in `harness/out/ablation/`.
 
 ## License

@@ -87,8 +87,8 @@ then use the SLIDE CONTENT and DESIGN SYSTEM sections as the source material. Ta
 
 ### Slide 7, Gemma on AMD (the partner-prize slide)
 - Title: Gemma 3 watches the video, on AMD silicon
-- Body: The describe stage, the model that actually watches each clip, runs **Gemma 3 27B multimodal,
-  self-hosted on an AMD Instinct MI300X via vLLM and ROCm**. Fireworks only serves Gemma as text,
+- Body: The describe stage, the model that actually watches each clip, runs **Gemma 3 12B multimodal,
+  self-hosted on an AMD Radeon PRO W7900 via vLLM and ROCm**. Fireworks only serves Gemma as text,
   so running the vision Gemma ourselves is the differentiator, and it puts real AMD compute at the core.
 - Supporting points: a Fireworks vision failover guarantees the 10 minute batch always finishes;
   every reported Gemma result is logged and reproducible; and per slide 5, this describe stage is
@@ -112,7 +112,7 @@ then use the SLIDE CONTENT and DESIGN SYSTEM sections as the source material. Ta
 
 ### Slide 10, Close
 - Big line: One video. Four voices. Grounded, resilient, and running on AMD.
-- Recap chips: two stage understanding, Gemma on MI300X, never scores zero.
+- Recap chips: two stage understanding, Gemma on Radeon PRO W7900, never scores zero.
 - Thanks + contact.
 
 ---

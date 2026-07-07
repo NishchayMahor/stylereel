@@ -24,7 +24,7 @@
                     ┌────────────────────────────────────────────┐
                     │  STAGE 1 · DESCRIBE   (vision)              │
                     │  ┌──────────────────────────────────────┐  │
-                    │  │ PRIMARY: Gemma 3 27B @ AMD MI300X     │  │  ◄── $3k Gemma prize
+                    │  │ PRIMARY: Gemma 3 12B @ AMD Radeon PRO W7900     │  │  ◄── $3k Gemma prize
                     │  │ (vLLM/ROCm) via GEMMA_ENDPOINT        │  │
                     │  │ FAILOVER: Fireworks Kimi K2.6 vision  │  │
                     │  └──────────────────────────────────────┘  │
@@ -55,7 +55,7 @@
 ## Model roster (Fireworks serverless, verified live)
 | Stage | Primary | Failover chain |
 |---|---|---|
-| Describe (vision) | Gemma 3 27B @ MI300X → Kimi K2.6 | Kimi K2.6 → Kimi K2.5 |
+| Describe (vision) | Gemma 3 12B @ Radeon PRO W7900 → Kimi K2.6 | Kimi K2.6 → Kimi K2.5 |
 | Stylize (text) | Kimi K2.6 | DeepSeek V4 Pro → GLM 5.2 |
 | Judge (text) | DeepSeek V4 Pro | GLM 5.2 |
 

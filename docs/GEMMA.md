@@ -2,13 +2,13 @@
 
 **Claim:** StyleReel's `describe` stage, the vision model that *watches each video* and
 writes the grounded description all four style captions derive from, runs
-**`google/gemma-3-27b-it` (multimodal), self-hosted on an AMD Instinct MI300X via
+**`google/gemma-3-12b-it` (multimodal), self-hosted on an AMD Radeon PRO W7900 via
 vLLM/ROCm**. Fireworks serves Gemma text-only, so running the *vision* Gemma ourselves is
 the differentiator, and it simultaneously nails "best use of AMD platforms."
 
 ## Architecture
 ```
-frames (ffmpeg) ──► Gemma 3 27B multimodal @ AMD MI300X (vLLM/ROCm)  ──► dense description
+frames (ffmpeg) ──► Gemma 3 12B multimodal @ AMD Radeon PRO W7900 (vLLM/ROCm)  ──► dense description
                      via GEMMA_ENDPOINT (OpenAI-compatible)                │
                      └─ health-check fail ─► Fireworks Kimi vision failover ┘
                                                                            ▼
@@ -30,16 +30,16 @@ docker run -it --ipc=host --network=host \
   -v $HOME/.cache/huggingface:/root/.cache/huggingface \
   rocm/vllm-dev:<latest-tag>
 
-vllm serve google/gemma-3-27b-it \
-  --dtype bfloat16 \            # bf16, NOT fp8 (fp8 dtype instability reports; MI300X has HBM headroom)
+vllm serve google/gemma-3-12b-it \
+  --dtype bfloat16 \            # bf16, NOT fp8 (fp8 dtype instability reports; Radeon PRO W7900 has HBM headroom)
   --max-model-len 32768 \
   --limit-mm-per-prompt image=8 \   # REQUIRED, default rejects multi-frame requests
   --gpu-memory-utilization 0.9 --port 8000
 ```
 - Use **Gemma 3**, never **Gemma 3n** (3n is text-only in vLLM).
-- 27B fits one MI300X (192GB) at TP=1, no tensor-parallel/NCCL tuning.
+- 12B fits one Radeon PRO W7900 (48GB) at TP=1, no tensor-parallel/NCCL tuning.
 - Sanity-test the vision path with a `curl` image_url request before trusting it.
-- 12B is the pragmatic failover tier if 27B prefill exceeds the 45s/clip budget.
+- 12B is the pragmatic failover tier if 12B prefill exceeds the 45s/clip budget.
 
 ## Evidence pack (this is a human-judged prize, artifacts win it)
 - [ ] **Ablation table** on the dev set: (i) full pipeline w/ Gemma describe, (ii) describe
@@ -50,7 +50,7 @@ vllm serve google/gemma-3-27b-it \
 - [ ] `curl` image request → description (proves vision path)
 - [ ] Architecture diagram with GEMMA_ENDPOINT + Fireworks failover
 - [ ] Demo video segment: clip → Gemma's description → 4 styled captions
-- [ ] README "How Gemma is used" paragraph + tags (Gemma, AMD, MI300X, vLLM)
+- [ ] README "How Gemma is used" paragraph + tags (Gemma, AMD, Radeon PRO W7900, vLLM)
 - [ ] Per-call backend log proving Gemma served the reported results
 - [ ] Honest failover disclosure + Gemma Terms of Use note
 
@@ -64,9 +64,9 @@ afternoon.
 ## Blocker
 AMD Developer Cloud access + $100 credits are pending approval, the critical path.
 Escalate now. Evidence is captured the moment the endpoint is healthy (survives instance
-reclamation). Insurance: rent an MI300X elsewhere, or Gemma-4 on a Fireworks dedicated
+reclamation). Insurance: rent an Radeon PRO W7900 elsewhere, or Gemma-4 on a Fireworks dedicated
 deployment (weaker "self-host on AMD" story).
 
-Sources: AMD ROCm blog "Deploying Gemma 3 with vLLM on MI300X"
+Sources: AMD ROCm blog "Deploying Gemma 3 with vLLM on Radeon PRO W7900"
 (rocm.blogs.amd.com/artificial-intelligence/deployingGemma-vllm), vLLM Supported Models
 (docs.vllm.ai/en/latest/models/supported_models), rocm/vllm-dev on Docker Hub.

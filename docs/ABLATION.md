@@ -23,6 +23,6 @@
   voices are never confusable.
 
 ## Gemma relevance ($3k prize)
-The describe stage, worth +0.15 accuracy, is exactly the stage Gemma 3 27B owns when
+The describe stage, worth +0.15 accuracy, is exactly the stage Gemma 3 12B owns when
 `GEMMA_ENDPOINT` is live. The Gemma arm (describe on Gemma vs Kimi vs none) slots directly
 into this table as the prize's core evidence.

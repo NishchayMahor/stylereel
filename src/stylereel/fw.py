@@ -2,8 +2,8 @@
 optional preferred backend (Gemma on AMD) that fails over to Fireworks.
 
 Backend order for every call:
-  1. GEMMA_ENDPOINT (if configured) — self-hosted google/gemma-3-27b-it on AMD
-     MI300X via vLLM. Marked down only after repeated transport failures, not on
+  1. GEMMA_ENDPOINT (if configured) — self-hosted google/gemma-3-12b-it on an
+     AMD Radeon PRO W7900 via vLLM/ROCm. Marked down only after repeated transport failures, not on
      a single per-request 4xx.
   2. Fireworks serverless fallback chain.
 """
@@ -68,7 +68,7 @@ class ModelClient:
     def __init__(self) -> None:
         self._client = httpx.AsyncClient(timeout=httpx.Timeout(60, connect=15))
         self._gemma_url = os.environ.get("GEMMA_ENDPOINT", "").rstrip("/")
-        self._gemma_model = os.environ.get("GEMMA_MODEL", "google/gemma-3-27b-it")
+        self._gemma_model = os.environ.get("GEMMA_MODEL", "google/gemma-3-12b-it")
         self._gemma_transport_failures = 0
 
     async def close(self) -> None:

@@ -4,9 +4,9 @@ Deadline: **2026-07-11 09:00 PDT**. Submit via lablab.ai platform.
 
 ## Required submission fields (lablab)
 - [ ] Project title: **StyleReel, Multi-Style Video Captioning on AMD + Gemma**
-- [ ] Short description (put "Gemma" + "AMD MI300X" in the first line for prize discoverability)
+- [ ] Short description (put "Gemma" + "AMD Radeon PRO W7900" in the first line for prize discoverability)
 - [ ] Long description (problem → pipeline → resilience → Gemma/AMD → eval results)
-- [ ] Tags: `video`, `AMD`, `MI300X`, `Gemma`, `Fireworks`, `agents`, `vLLM`, `ROCm`
+- [ ] Tags: `video`, `AMD`, `Radeon PRO W7900`, `Gemma`, `Fireworks`, `agents`, `vLLM`, `ROCm`
 - [ ] Cover image (original)
 - [ ] **Video presentation** (≤5 min MP4), see storyboard below
 - [ ] **Slide deck** (PDF, ≤10 slides, mirrors video)
@@ -24,7 +24,7 @@ Deadline: **2026-07-11 09:00 PDT**. Submit via lablab.ai platform.
 3. **2:30–3:30, Under the hood.** Architecture diagram (docs/architecture.md). Smart frames,
    local Whisper (Fireworks ASR is dead, we transcribe), two-stage describe→stylize, verify
    pass, self-judge, degraded ladder.
-4. **3:30–4:30, Gemma on AMD.** "The describe stage, the model that *watches* the video, is Gemma 3 27B multimodal, self-hosted on an AMD MI300X via vLLM/ROCm." Show rocm-smi +
+4. **3:30–4:30, Gemma on AMD.** "The describe stage, the model that *watches* the video, is Gemma 3 12B multimodal, self-hosted on an AMD Radeon PRO W7900 via vLLM/ROCm." Show rocm-smi +
    vLLM logs + the ablation table (with-Gemma vs without). This is the $3k prize segment.
 5. **4:30–5:00, Results & resilience.** Dev-set score table; chaos suite green; "never zero,
    never malformed, always exit 0." Close on the repo + image URL.
