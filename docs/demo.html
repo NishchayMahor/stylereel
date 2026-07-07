@@ -23,7 +23,8 @@
     --sarcastic: #c98bff;
     --tech: #4fe0c4;
     --nontech: #ffb14e;
-    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", ui-sans-serif, system-ui, Helvetica, Arial, sans-serif;
+    --serif: var(--display);
     --sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
     --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
     --maxw: 1140px;
@@ -67,10 +68,9 @@
 
   /* hero */
   .hero-in { padding: 108px 0 92px; }
-  h1 { font-family: var(--serif); font-weight: 600; letter-spacing: -0.02em;
-    font-size: clamp(48px, 9vw, 94px); line-height: 0.97; margin: 22px 0 0; text-wrap: balance; }
-  h1 .grad { background: linear-gradient(100deg, var(--cyan) 0%, var(--violet) 45%, var(--magenta) 90%);
-    -webkit-background-clip: text; background-clip: text; color: transparent; font-style: italic; }
+  h1 { font-family: var(--display); font-weight: 800; letter-spacing: -0.035em; color: #ffffff;
+    font-size: clamp(46px, 8.4vw, 90px); line-height: 0.98; margin: 22px 0 0; text-wrap: balance; }
+  h1 .grad { color: #ffffff; }
   .lede { font-size: clamp(18px, 2.2vw, 22px); color: var(--muted); max-width: 33em; margin: 28px 0 0; text-wrap: pretty; }
   .cta-row { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 36px; }
   .btn { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600;
@@ -91,7 +91,7 @@
   /* sections */
   section { padding: 84px 0; }
   .sec-top { margin-bottom: 42px; }
-  h2 { font-family: var(--serif); font-weight: 600; font-size: clamp(30px, 3.8vw, 42px); letter-spacing: -0.015em; margin: 12px 0 12px; text-wrap: balance; }
+  h2 { font-family: var(--display); font-weight: 700; color: #ffffff; font-size: clamp(29px, 3.6vw, 40px); letter-spacing: -0.025em; margin: 12px 0 12px; text-wrap: balance; }
   .sec-sub { color: var(--muted); max-width: 40em; margin: 0; }
 
   /* glass card base + 3D tilt */
@@ -134,8 +134,8 @@
   .stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
   @media (max-width: 780px){ .stats { grid-template-columns: repeat(2,1fr); } }
   .stat { padding: 24px; }
-  .stat .n { font-family: var(--serif); font-size: 38px; font-weight: 600; line-height: 1;
-    background: linear-gradient(120deg, var(--cyan), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; font-variant-numeric: tabular-nums; }
+  .stat .n { font-family: var(--display); font-size: 38px; font-weight: 800; line-height: 1; color: #ffffff;
+    letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
   .stat .l { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.45; }
 
   /* pipeline */
