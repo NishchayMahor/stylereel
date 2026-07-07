@@ -71,3 +71,14 @@ def test_write_results_garbage_values(tmp_path):
     write_results(tmp_path / "r.json", {"v1": {"formal": None, "sarcastic": 42}}, tasks)
     data = json.loads((tmp_path / "r.json").read_text())
     assert all(isinstance(v, str) and v for v in data[0]["captions"].values())
+
+
+def test_normalize_caption_strips_emdashes():
+    from stylereel.contract import normalize_caption
+    assert "—" not in normalize_caption("It does nothing—no blink, no twitch.")
+    assert normalize_caption("It does nothing—no blink.") == "It does nothing, no blink."
+    assert normalize_caption("sun, its flare — then it lands") == "sun, its flare, then it lands"
+    # hyphenated words preserved
+    assert "close-up" in normalize_caption("a close-up shot")
+    # smart quotes normalized
+    assert '"' not in normalize_caption("“quote”").replace('"', "")

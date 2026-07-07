@@ -26,6 +26,25 @@ FALLBACK_CAPTIONS = {
 GENERIC_FALLBACK = "A short video clip showing a scene unfolding over time."
 
 
+def normalize_caption(text: str) -> str:
+    """Clean model output into natural prose: strip em/en dashes (an AI tell) and
+    tidy spacing/quotes. Keeps hyphenated words and numeric ranges intact."""
+    import re
+
+    t = text.strip().strip('"').strip("'")
+    # spaced dash used as punctuation -> comma
+    t = re.sub(r"\s+[—–―]\s+", ", ", t)
+    # tight em/en dash between words -> comma+space; hyphen between letters kept
+    t = re.sub(r"(?<=\w)[—―](?=\w)", ", ", t)
+    t = t.replace("—", ", ").replace("―", ", ")
+    t = t.replace("‘", "'").replace("’", "'")
+    t = t.replace("“", '"').replace("”", '"')
+    t = re.sub(r"\s+,", ",", t)
+    t = re.sub(r",\s*,", ",", t)
+    t = re.sub(r"[ \t]{2,}", " ", t)
+    return t.strip()
+
+
 def canonical_style(style: str) -> str | None:
     """Map a requested style string to one of our four canonical styles, or None."""
     norm = style.strip().lower().replace("-", "_").replace(" ", "_")
@@ -73,7 +92,7 @@ def write_results(path: str | Path, results: dict[str, dict[str, str]], tasks: l
             cap = got.get(style)
             if not isinstance(cap, str) or not cap.strip():
                 cap = fallback_for(style)
-            captions[style] = cap.strip()
+            captions[style] = normalize_caption(cap)
         out.append({"task_id": task.task_id, "captions": captions})
     p = Path(path)
     p.parent.mkdir(parents=True, exist_ok=True)
