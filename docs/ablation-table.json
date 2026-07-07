@@ -1,0 +1,26 @@
+{
+  "full": {
+    "accuracy": 0.862,
+    "style": 0.93,
+    "combined": 0.896,
+    "blind_style_id": 1.0
+  },
+  "no_verify": {
+    "accuracy": 0.869,
+    "style": 0.905,
+    "combined": 0.887,
+    "blind_style_id": 1.0
+  },
+  "no_bestof": {
+    "accuracy": 0.874,
+    "style": 0.905,
+    "combined": 0.889,
+    "blind_style_id": 1.0
+  },
+  "blind": {
+    "accuracy": 0.716,
+    "style": 0.947,
+    "combined": 0.831,
+    "blind_style_id": 1.0
+  }
+}
