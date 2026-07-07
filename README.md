@@ -97,6 +97,22 @@ make harness                  # dev-set run + LLM-judge scoring (needs FIREWORKS
 ```
 Put your key in `.fireworks_key` at the repo root (gitignored) or `export FIREWORKS_API_KEY=...`.
 
+## Evaluation
+We ship a local eval harness (`harness/`) that runs the container against a 15-clip dev set
+and scores every caption with an independent LLM-judge on accuracy + style, plus a
+blind-style-ID distinctness metric. Current dev-set standing:
+
+| metric | score |
+|---|---|
+| combined (accuracy + style) | ~0.90 |
+| style match | ~0.93 |
+| blind style-ID (can a judge tell the 4 apart?) | **1.00** |
+| 2-min multi-scene clip, end-to-end | 51 s |
+| chaos suite (dead URL, odd styles, malformed input) | 5/5 pass |
+
+See `docs/architecture.md` (pipeline), `docs/GEMMA.md` (the AMD MI300X + Gemma story),
+`docs/SUBMISSION.md` (demo script), and the ablation table in `harness/out/ablation/`.
+
 ## License
 MIT (see `LICENSE`). Bundled: faster-whisper (MIT), PySceneDetect (BSD-3), OpenCV (Apache-2.0).
 Gemma usage is governed by the Gemma Terms of Use.
