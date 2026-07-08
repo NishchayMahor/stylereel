@@ -21,12 +21,16 @@ trap 'git checkout -- src/stylereel/keybox.py' EXIT   # never leave the key on d
 echo "== 3. build + push linux/amd64 =="
 docker buildx build --platform linux/amd64 -t "$IMAGE" --push .
 
-echo "== 4. make the GHCR package public =="
-gh api -X PATCH "user/packages/container/stylereel/visibility" -f visibility=public 2>/dev/null \
-  || echo "  (set visibility to Public in the GHCR web UI if this failed)"
+if [ "${PUBLISH:-0}" = "1" ]; then
+  echo "== 4. make the GHCR package PUBLIC (PUBLISH=1) =="
+  gh api -X PATCH "user/packages/container/stylereel/visibility" -f visibility=public 2>/dev/null \
+    || echo "  (set visibility to Public in the GHCR web UI if this failed)"
+else
+  echo "== 4. leaving package PRIVATE (set PUBLISH=1 at final submission to make it public) =="
+fi
 
 echo "== 5. verify: pull from a clean state and smoke =="
-docker logout ghcr.io
+[ "${PUBLISH:-0}" = "1" ] && docker logout ghcr.io   # public: prove no-auth pull works
 docker rmi "$IMAGE" 2>/dev/null || true
 docker pull "$IMAGE"
 docker manifest inspect "$IMAGE" | grep -q '"architecture": "amd64"' && echo "  amd64 manifest OK"
