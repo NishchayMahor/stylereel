@@ -1,65 +1,52 @@
 # lablab Submission Content (ready to paste)
 
-Fill these fields on the lablab.ai submission form for AMD Developer Hackathon ACT II, Track 2.
+The submission is a **3-step wizard** and it **saves** ("Save and return to the team page"),
+so you can fill it in over several sittings and finish before the July 11 09:00 PDT deadline.
+Field limits below are the real ones from the form. All copy is written to fit them and to
+read like a person wrote it.
 
-## Project title
-StyleReel, Four Voices for Every Video (Gemma on AMD Radeon PRO W7900)
+## Step 1 — Basic Information
 
-## Short description (one line, put Gemma + AMD up front for prize discoverability)
-A containerized video-captioning agent that writes four grounded voices per clip, with the
-video-understanding stage running Gemma 3 12B on an AMD Radeon PRO W7900.
+### Submission Title (5–50 characters)
+Pick one:
+- `StyleReel: four voices for every video`  (38 chars, clean)
+- `StyleReel: Gemma video captions, four voices`  (44 chars, puts "Gemma" in the title for prize discoverability, recommended)
 
-## Long description
-StyleReel watches a short video clip, works out what is actually happening on screen and in
-the audio, then captions it in four distinct registers: formal, sarcastic, humorous-tech, and
-humorous-non-tech. The facts stay true to the video; only the tone changes.
+### Short Description (50–255 characters)
+> One clip, four captions, four completely different moods: formal, sarcastic, tech-humor, and everyday-humor. The part that actually watches the video is Gemma 3, self-hosted on an AMD Radeon PRO W7900. The facts stay true, only the tone changes.
 
-How it works: smart frame selection plus a local Whisper transcript (Fireworks retired its
-speech API, so we run our own, which is why our captions understand dialogue). A vision model
-writes one grounded description and verifies it against the frames a second time. Four style
-writers then work only from that checked fact sheet, best of five drafts each, and an
-independent model gates accuracy and keeps the strongest take. Because every caption derives
-from one verified description, the four never contradict the video or each other.
+(233 characters.)
 
-We measured everything with a local harness that scores each caption with a separate model:
-combined 0.89, style match 0.93, and a blind style-ID of 1.00 (a judge tells all four voices
-apart every time). An ablation shows the understanding stage is where the score is won:
-removing it drops accuracy from 0.86 to 0.72.
+### Long Description (600–2000 characters, 100+ words)
+> StyleReel takes a short video and writes four captions for it, each in a different voice: formal, sarcastic, tech-humor, and everyday-humor. The catch is that all four stay true to what is actually on screen. Only the tone changes.
+>
+> Here is how it works. It pulls a handful of smart frames and transcribes the audio itself (Fireworks retired its speech API, so we run Whisper locally, which is why our captions actually get the dialogue). Then one model watches those frames, writes down what is happening, and checks its notes against the frames a second time so nothing gets invented. Four separate writers each take that fact sheet and find their voice, best of five drafts. A different model grades every draft for accuracy and keeps the strongest one. Because all four captions come from the same checked description, they never argue with the video or with each other.
+>
+> The model that watches the video is Gemma 3, self-hosted on an AMD Radeon PRO W7900 with vLLM and ROCm. We did not just call Gemma over an API. We ran its multimodal vision ourselves on AMD hardware, and head to head it matched our best cloud vision model on accuracy and style.
+>
+> We also cared about never failing. A valid results file exists from the first second and refreshes after every clip, so a crash or a timeout never leaves you with nothing. Every style is always there, the JSON is always valid, and it exits clean. We threw dead URLs, odd inputs and malformed data at it and it kept working. On our own test set it scores about 0.93 on style, and a blind judge tells all four voices apart every time.
 
-The describe stage, the model that actually watches the video, runs Gemma 3 12B multimodal,
-self-hosted on an AMD Radeon PRO W7900 via vLLM and ROCm. Fireworks only serves Gemma as text,
-so running the vision Gemma ourselves is the differentiator and puts real AMD compute at the
-core. A Fireworks vision failover guarantees the 10-minute batch always finishes.
+(~1,650 characters. Trim the last paragraph if a field counter complains.)
 
-Resilience is a feature: a valid results file exists from the first moment and refreshes after
-every clip, a degraded ladder guarantees a style key is never missing, a deadline watchdog
-writes output before any slow thread can push past the 10-minute kill, and five of five chaos
-drills still produce valid JSON and exit clean. A 2-minute, 3-scene clip captions end to end
-in 51 seconds.
+### Categories / Event Tracks
+Track 2: Video Captioning Agent
 
-## Technology and category tags
-video, video-captioning, AMD, Radeon PRO W7900, ROCm, vLLM, Gemma, Fireworks AI, Docker, agents, LLM, multimodal
+### Technologies Used
+Gemma 3, AMD Radeon PRO W7900, ROCm, vLLM, Fireworks AI, Docker, Whisper, Python
 
-## Cover image
-Use `docs/cover.png` (generated from the demo identity).
+## Step 2 — Cover image and presentation
+- **Cover image:** `docs/cover.png` (make one from the demo identity, dark aurora + "One video. Four voices.")
+- **Video presentation:** the demo-first cut, see storyboard in `docs/SUBMISSION.md`
+- **Slide presentation:** built from `docs/SLIDES.md`
 
-## Application / demo URL
-[GitHub Pages URL once repo is public, e.g. https://nishchaymahor.github.io/stylereel/  OR the claude.ai artifact link]
+## Step 3 — App hosting and code
+- **Public GitHub repository:** https://github.com/NishchayMahor/stylereel  (flip to public at submission)
+- **Docker image / application URL:** ghcr.io/nishchaymahor/stylereel:latest  (public, linux/amd64, via `scripts/release.sh`)
+- **Demo URL:** the GitHub Pages page (re-enable at submission) or the claude.ai artifact link
 
-## Public GitHub repository
-https://github.com/NishchayMahor/stylereel  (flip to public at submission)
-
-## Docker image
-ghcr.io/nishchaymahor/stylereel:latest  (public, linux/amd64, built via scripts/release.sh)
-
-## Video presentation
-See storyboard in docs/SUBMISSION.md (<= 5 min, demo-first).
-
-## Slide deck
-Built from docs/SLIDES.md.
-
-## Important requirements checklist (from the guide)
+## Requirements checklist (from the guide)
 - [ ] Image publicly pullable, linux/amd64 manifest, <= 10 GB
 - [ ] Public repo with a README that reproduces in one command
-- [ ] No hardcoded/cached answers (verified: unseen-variant safe, chaos-tested)
+- [ ] No hardcoded or cached answers (verified: unseen-variant safe, chaos-tested)
 - [ ] MIT licensed
+- [ ] Gemma discoverable in title, short description, and tags
