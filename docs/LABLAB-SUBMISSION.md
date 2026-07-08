@@ -5,7 +5,7 @@ so you can fill it in over several sittings and finish before the July 11 09:00 
 Field limits below are the real ones from the form. All copy is written to fit them and to
 read like a person wrote it.
 
-## Step 1 — Basic Information
+## Step 1: Basic Information
 
 ### Submission Title (5–50 characters)
 Pick one:
@@ -34,12 +34,12 @@ Track 2: Video Captioning Agent
 ### Technologies Used
 Gemma 3, AMD Radeon PRO W7900, ROCm, vLLM, Fireworks AI, Docker, Whisper, Python
 
-## Step 2 — Cover image and presentation
+## Step 2: Cover image and presentation
 - **Cover image:** `docs/cover.png` (make one from the demo identity, dark aurora + "One video. Four voices.")
 - **Video presentation:** the demo-first cut, see storyboard in `docs/SUBMISSION.md`
 - **Slide presentation:** built from `docs/SLIDES.md`
 
-## Step 3 — App hosting and code
+## Step 3: App hosting and code
 - **Public GitHub repository:** https://github.com/NishchayMahor/stylereel  (flip to public at submission)
 - **Docker image / application URL:** ghcr.io/nishchaymahor/stylereel:latest  (public, linux/amd64, via `scripts/release.sh`)
 - **Demo URL:** the GitHub Pages page (re-enable at submission) or the claude.ai artifact link
