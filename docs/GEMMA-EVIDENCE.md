@@ -41,6 +41,18 @@ Gemma 3 12B on the W7900 described all three official clips accurately:
 
 Full descriptions: `docs/gemma-evidence/gemma_descriptions.json`.
 
+## Gemma matches our production vision model (head-to-head)
+Same 3 clips, same independent judge, describe stage swapped:
+
+| describe backend | accuracy | style | combined |
+|---|---|---|---|
+| Gemma 3 12B on AMD W7900 (simple prompt, no verify/audio) | 0.754 | 0.925 | 0.840 |
+| Kimi vision on Fireworks (full tuned prompt + verify + audio) | 0.763 | 0.925 | 0.844 |
+
+Gemma ties our tuned Fireworks vision path (the 0.009 gap is inside the judge's ~0.02 noise),
+and it does so with a *simpler* prompt and no verification pass or audio transcript. Given the
+same tuning, Gemma 3 12B is a genuine peer for the video-understanding stage on AMD hardware.
+
 ## Gemma powers the whole pipeline
 Those Gemma descriptions were fed straight into StyleReel's four style writers, producing the
 final four voices per clip: `docs/gemma-evidence/gemma_powered_captions.json`. Example (kitten,

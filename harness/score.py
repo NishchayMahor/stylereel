@@ -69,11 +69,25 @@ Reply ONLY JSON mapping caption index to style: {{"0": "...", "1": "...", "2": "
 
 def _frames_content(frames):
     content = [{"type": "text", "text": "Video frames (chronological):"}]
-    for f in frames[:16]:  # full coverage so the judge can verify real details
+    # 10 frames balances coverage vs judge latency (16 frames times out on Kimi vision)
+    step = max(1, len(frames) // 10)
+    for f in frames[::step][:10]:
         b64 = base64.b64encode(f.jpeg).decode()
         content.append({"type": "image_url",
                         "image_url": {"url": f"data:image/jpeg;base64,{b64}"}})
     return content
+
+
+async def _robust(coro_fn, tries=3):
+    """Retry a judge call; return '' on repeated failure so scoring never crashes."""
+    for i in range(tries):
+        try:
+            return await coro_fn()
+        except Exception:
+            if i == tries - 1:
+                return ""
+            await asyncio.sleep(1.5 * (i + 1))
+    return ""
 
 
 def _num(text: str, key: str) -> float:
@@ -101,10 +115,10 @@ async def score_clip(client: ModelClient, task_id: str, video_path: Path,
         sty_msgs = [{"role": "user", "content": STYLE_PROMPT.format(
             style=style, style_def=STYLE_DEFS.get(style, style), caption=cap)}]
         acc_raw, sty_raw = await asyncio.gather(
-            client.chat(acc_msgs, vision=True, max_tokens=120, temperature=0.0,
-                        use_gemma=False, chain=VISION_JUDGE),
-            client.chat(sty_msgs, max_tokens=120, temperature=0.0,
-                        use_gemma=False, chain=TEXT_JUDGE),
+            _robust(lambda: client.chat(acc_msgs, vision=True, max_tokens=120, temperature=0.0,
+                                        use_gemma=False, chain=VISION_JUDGE, read_timeout=90)),
+            _robust(lambda: client.chat(sty_msgs, max_tokens=120, temperature=0.0,
+                                        use_gemma=False, chain=TEXT_JUDGE, read_timeout=90)),
         )
         per_style[style] = {"accuracy": _num(acc_raw, "accuracy"),
                             "style": _num(sty_raw, "style")}

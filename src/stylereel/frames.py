@@ -12,6 +12,7 @@ Fallback ladder: ffmpeg sampling -> cv2 sequential-read sampling.
 from __future__ import annotations
 
 import logging
+import os
 import subprocess
 import tempfile
 from dataclasses import dataclass
@@ -24,7 +25,7 @@ log = logging.getLogger(__name__)
 
 MAX_LONG_SIDE = 768
 JPEG_QUALITY = 82
-CANDIDATES = 28  # sampled by ffmpeg, then reduced to max_frames
+DEFAULT_MAX_FRAMES = int(os.environ.get("STYLEREEL_MAX_FRAMES", "16"))
 
 
 @dataclass
@@ -139,11 +140,14 @@ def _cv2_fallback(video_path: str, n: int) -> list[Frame]:
         cap.release()
 
 
-def extract_frames(video_path: str, max_frames: int = 16) -> list[Frame]:
+def extract_frames(video_path: str, max_frames: int | None = None) -> list[Frame]:
+    if max_frames is None:
+        max_frames = DEFAULT_MAX_FRAMES
+    candidates = max(28, max_frames * 2)  # sample enough to pick a diverse subset
     duration = _duration_s(video_path)
     try:
         with tempfile.TemporaryDirectory() as td:
-            sampled = _ffmpeg_sample(video_path, CANDIDATES, duration, td)
+            sampled = _ffmpeg_sample(video_path, candidates, duration, td)
             imgs: list[tuple[float, np.ndarray]] = []
             for ts, p in sampled:
                 img = cv2.imread(p)
