@@ -35,10 +35,26 @@ Deadline: **2026-07-11 09:00 PDT**. Submit via lablab.ai platform.
 - Chaos suite: 5/5 scenarios → valid JSON, exit 0
 - 2-min multi-scene clip: 51s end-to-end, all scenes + audio covered
 
+## Key handling (Track 2)
+The guide is explicit for Track 2: "No API key or model restriction is injected. Use your own
+credentials inside the container." So baking the Fireworks key into the image is the intended
+design, not a violation. The only caveat is that the image must be publicly pullable, so the
+baked key is technically extractable. It is a capped hackathon key (~$50), so blast radius is
+small. You do NOT need to rotate before pushing. Just REVOKE the key after judging.
+
 ## Final freeze ritual (do NOT skip)
-1. Rotate Fireworks key → `python scripts/obfuscate_key.py <new_key>` (bakes into local keybox.py)
-2. `docker buildx build --platform linux/amd64 -t ghcr.io/<user>/stylereel:latest --push .`
-3. `git checkout src/stylereel/keybox.py` (revert baked key, never commit it)
-4. Make GHCR package public; `docker logout ghcr.io && docker pull ghcr.io/<user>/stylereel:latest`
-5. Run smoke on the pulled digest; confirm valid results.json
-6. Submit that exact tag/digest on lablab ≥12h before deadline; keep 3 submission attempts in reserve
+1. Push the private build now to de-risk mechanics:
+   `PUBLISH=0 FIREWORKS_API_KEY=$(cat .fireworks_key) bash scripts/release.sh`
+2. At submission, flip public with the same current (or a fresh) key:
+   `PUBLISH=1 FIREWORKS_API_KEY=$(cat .fireworks_key) bash scripts/release.sh`
+   (release.sh bakes the key, builds linux/amd64, pushes, reverts keybox, then pull-tests + smokes)
+3. Flip the GitHub repo and Pages public ONLY at the last moment before submitting (the guide
+   requires a public repo). Minimise exposure: the public Docker image already contains our
+   source and prompts, so a public repo adds little; keep it private until submission and set it
+   back to private after judging ends.
+4. Submit that exact tag/digest on lablab >=12h before deadline; keep 3 submission attempts in reserve.
+
+## AFTER judging (do NOT forget)
+- [ ] **Revoke the baked Fireworks key** at https://app.fireworks.ai/settings/users/api-keys
+      (the image is public, so the key is exposed until revoked). This fully closes the exposure.
+- [ ] Optionally make the GHCR package private again and stop any AMD notebook still running.
