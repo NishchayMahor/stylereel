@@ -14,3 +14,5 @@ uv.lock
 # example videos stay local (too large for git); their .txt outputs are tracked
 examples/*.mp4
 .hf_token
+
+!docs/cover.png
